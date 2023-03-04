@@ -16,47 +16,46 @@ import AddDialog from "../components/Dialogs/add-data-dialog";
 
 export default function IntercomeComponent() {
   const [openAddNew, setOpenAddNew] = useState(false);
-  const [refresh, setRefresh] = useState(false);
+  const [address, setAddress] = useState("");
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      address: data.get("address"),
+      //   address: data.get("address"),
     });
-    alert(data.get("address"));
+    // alert(data.get("address"));
   };
 
   const [intercomData, setIntercomData] = useState(
     JSON.parse(window.localStorage.getItem("intercome"))
   );
 
-  const handlerReloadeIntercoData = () => {
-    setOpenAddNew(false);  
-    setRefresh(!refresh);
-  };
-
-  //   const [filteredData, setFilteredData] = React.useState(intercomData.Data1);
-  const [filteredData, setFilteredData] = React.useState(
-    intercomData ? intercomData : []
-  );
+  const [filteredData, setFilteredData] = React.useState(intercomData || []);
 
   const handleChange = (e) => {
     const inputVal = e.target.value;
+    setAddress(inputVal);
     if (inputVal === "") {
-      //   setFilteredData(intercomData.Data1);
       setFilteredData(intercomData);
       return;
     }
-    // const newData = intercomData.Data1.filter((item) =>
     const newData = intercomData.filter((item) =>
       item.address.toLowerCase().includes(inputVal.toLowerCase())
     );
     setFilteredData(newData);
   };
 
+  const handleRefresh = () => {
+    setFilteredData(JSON.parse(localStorage.getItem("intercome")));
+    setIntercomData(JSON.parse(localStorage.getItem("intercome")));
+    setAddress("");
+    setOpenAddNew(false);
+  };
+
   return (
     <div>
-      <AddDialog open={openAddNew} close={handlerReloadeIntercoData} />
+      <AddDialog open={openAddNew} close={handleRefresh} />
       <Box
         sx={{
           my: 8,
@@ -101,13 +100,14 @@ export default function IntercomeComponent() {
               name="address"
               autoComplete="address"
               autoFocus
+              value={address}
               onChange={(e) => handleChange(e)}
             />
             <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
               <SearchIcon />
             </IconButton>
           </Paper>
-          <AddressList data={filteredData} />
+          <AddressList data={filteredData}  close={handleRefresh}/>
 
           <br />
 
