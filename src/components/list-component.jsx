@@ -19,6 +19,7 @@ export default function AddressList({ data }) {
 
   const hendleOpenShowDialog = (d) => {
     setDData(d);
+    setOpenShowDialog(true);
   };
 
   React.useEffect(() => {
