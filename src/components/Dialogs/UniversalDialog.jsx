@@ -19,6 +19,7 @@ export default function AlertDialogSlide({
   btnPositiveClick,
   btnNegativeClick,
   open,
+  btnPositiveDisable,
 }) {
   return (
     <div>
@@ -33,7 +34,7 @@ export default function AlertDialogSlide({
         <DialogContent>{content}</DialogContent>
         <DialogActions>
           <Button onClick={btnNegativeClick}>{btnNegativeTitle}</Button>
-          <Button onClick={btnPositiveClick}>{btnPositiveTitle}</Button>
+          <Button onClick={btnPositiveClick} disabled={btnPositiveDisable}>{btnPositiveTitle}</Button>
         </DialogActions>
       </Dialog>
     </div>

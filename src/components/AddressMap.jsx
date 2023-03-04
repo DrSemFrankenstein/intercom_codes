@@ -25,20 +25,22 @@ const Map = () => {
         setError(error);
       }
     );
-  },[]);
+  }, []);
 
   return (
     <div>
-      {error ? (<>
-        <p>{error.message}</p>
-            <iframe
-              title="Google Maps"
-              frameBorder="0"
-              style={{ border: 0, height: "100vh" }}
-              src={mapUrl}
-              allowFullScreen
-              width="100%"
-            /></>
+      {error ? (
+        <>
+          <p>{error.message}</p>
+          <iframe
+            title="Google Maps"
+            frameBorder="0"
+            style={{ border: 0, height: "100vh" }}
+            src={mapUrl}
+            allowFullScreen
+            width="100%"
+          />
+        </>
       ) : (
         <>
           {position ? (

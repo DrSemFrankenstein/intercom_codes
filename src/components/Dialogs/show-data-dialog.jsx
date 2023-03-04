@@ -1,14 +1,29 @@
 import * as React from "react";
 import { useState } from "react";
 import AddressForm from "./AddresForm";
+import ConfirmDialog from "./confirm-dialog";
 import AlertDialogSlide from "./UniversalDialog";
 
 export default function ShowDialog({ open, close, ddata }) {
-  const handlePositiveClick = () => {
-    close();
-  };
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const handleNegativeClick = () => {
     close();
+  };
+  const handlePositiveClick = () => {
+    setConfirmOpen(true);
+  };
+
+  const handleConfirmClose = (bool) => {
+    if (bool) {
+      let lsdata = JSON.parse(window.localStorage.getItem("intercome"));
+      const newData = lsdata.filter((d) => d.id !== ddata.id);
+      window.localStorage.setItem("intercome", JSON.stringify(newData));
+      setConfirmOpen(false);
+      close();
+    } else {
+      setConfirmOpen(false);
+      close();
+    }
   };
 
   const [formData, setFormData] = useState(undefined);
@@ -25,11 +40,13 @@ export default function ShowDialog({ open, close, ddata }) {
             init={ddata}
           />
         }
-        btnPositiveTitle={"CLOSE"}
-        btnNegativeTitle={"DELETE"}
+        btnPositiveTitle={"DELETE"}
+        btnNegativeTitle={"CLOSE"}
         btnPositiveClick={handlePositiveClick}
         btnNegativeClick={handleNegativeClick}
+        btnPositiveDisable={false}
       />
+      <ConfirmDialog open={confirmOpen} close={handleConfirmClose} />
     </div>
   );
 }

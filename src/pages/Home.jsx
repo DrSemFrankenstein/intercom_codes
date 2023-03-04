@@ -65,7 +65,7 @@ export default function Home() {
           <Map />
         </Grid>
       </Grid>
-      <Copyright sx={{ mt: 5 }} />
+      {/* <Copyright sx={{ mt: 5 }} /> */}
     </ThemeProvider>
   );
 }

@@ -12,8 +12,13 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import StarIcon from "@mui/icons-material/Star";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import ShowDialog from "./Dialogs/show-data-dialog";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import EditIcon from "@mui/icons-material/Edit";
+import SweetAlert2 from "react-sweetalert2";
 
-export default function AddressList({ data }) {
+export default function AddressList({ data, close }) {
   const [openShowDialog, setOpenShowDialog] = useState(false);
   const [ddata, setDData] = useState(undefined);
 
@@ -28,21 +33,38 @@ export default function AddressList({ data }) {
     }
   }, [ddata]);
 
+  const handleClose = () => {
+    close();
+    setOpenShowDialog(false);
+  };
+
+  const [swalProps, setSwalProps] = useState({});
+
+  const handelClickShowCode = (code) => {
+    setSwalProps({
+      show: true,
+      position: "center",
+      // icon: "info",
+      title: code,
+      showConfirmButton: false,
+      timer: 5500,
+    });
+  };
+
   return (
     <>
-      <ShowDialog
-        open={openShowDialog}
-        close={() => setOpenShowDialog(false)}
-        ddata={ddata}
+      <SweetAlert2
+        {...swalProps}
+        didClose={() => {
+          setSwalProps({});
+        }}
       />
+      <ShowDialog open={openShowDialog} close={handleClose} ddata={ddata} />
       <List sx={{ width: "100%" }}>
         {data.map((d, i) => (
-          <>
-            <ListItem
-              alignItems="flex-start"
-              onClick={() => hendleOpenShowDialog(data[i])}
-            >
-              <ListItemButton>
+          <React.Fragment key={i}>
+            <ListItem key={i} alignItems="flex-start">
+              <ListItemButton onClick={() => handelClickShowCode(d.code)}>
                 <ListItemIcon>
                   <ApartmentIcon />
                 </ListItemIcon>
@@ -62,10 +84,21 @@ export default function AddressList({ data }) {
                     </React.Fragment>
                   }
                 />
+                {/* <IconButton aria-label="delete"  onClick={() => hendleOpenShowDialog(data[i])}>
+                <LocationOnIcon />
+                </IconButton> */}
+
+                <IconButton
+                  aria-label="edit"
+                  color="secondary"
+                  onClick={() => hendleOpenShowDialog(data[i])}
+                >
+                  <DeleteIcon />
+                </IconButton>
               </ListItemButton>
             </ListItem>
             <Divider variant="inset" component="li" />
-          </>
+          </React.Fragment>
         ))}
       </List>
     </>
